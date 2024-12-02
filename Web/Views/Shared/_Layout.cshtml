@@ -1,0 +1,97 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Web.Models.Identities
+@inject SignInManager<User> SignInManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BLOG</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <div aria-live="polite" aria-atomic="true">
+        <div class="toast-container position-absolute top-0 end-0 p-3" id="notifications"></div>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Criação de conexão com o SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/NotificationHub") // Certifique-se de que o caminho seja o mesmo que você mapeou no backend
+            .build();
+
+        // Iniciar a conexão
+        connection.start().then(function () {
+            console.log("Conectado ao hub de notificações!");
+        }).catch(function (err) {
+            console.error("Erro ao conectar: " + err);
+        });
+
+        // Recebendo as notificações
+        connection.on("ReceiveNotification", function (message) {
+            // Criação do novo toast
+            const toastContainer = document.getElementById("notifications");
+
+            const toastElement = document.createElement("div");
+            toastElement.classList.add("toast", "show", "text-white", "bg-primary");
+            toastElement.setAttribute("role", "alert");
+            toastElement.setAttribute("aria-live", "assertive");
+            toastElement.setAttribute("aria-atomic", "true");
+
+            toastElement.innerHTML = `
+             <div class="d-flex">
+              <div class="toast-body">
+               ${message}
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            `;
+
+            // Adiciona o toast ao contêiner
+            toastContainer.appendChild(toastElement);
+
+            // Remove o toast após alguns segundos
+            setTimeout(() => {
+                toastElement.classList.remove("show");
+                toastElement.classList.add("hide");
+            }, 10000);  // O toast desaparece após  segundos
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

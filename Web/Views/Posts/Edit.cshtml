@@ -1,0 +1,39 @@
+﻿@using Web.Models.Identities
+@model Post
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row d-flex justify-content-center">
+    <div class="col-md-4 card p-3">
+        <h2 class="text-center">Cadastro</h2>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="AuthorId" />
+            <div class="mb-2">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+                <label asp-for="Content" class="control-label"></label>
+                <input asp-for="Content" class="form-control" />
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <a asp-controller="Posts" asp-action="Index" asp-route-authorId="@Model.AuthorId" class="text-decoration-none float-start mt-2">Voltar</a>
+                </div>
+                <div class="col-4">
+                    <input type="submit" value="Salvar" class="btn btn-primary btn-sm float-end" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

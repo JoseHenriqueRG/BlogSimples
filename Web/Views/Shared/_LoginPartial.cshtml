@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.SignalR.Client
+@using Web.Models.Identities
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var userId = UserManager.GetUserId(User);
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @User.Identity!.Name
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" asp-controller="Posts" asp-action="Create">Criar Post</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Posts" asp-action="Index" asp-route-authorId="@userId">Meus Posts</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Sair</a>
+                </li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Cadastrar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Entrar</a>
+        </li>
+    }
+</ul>

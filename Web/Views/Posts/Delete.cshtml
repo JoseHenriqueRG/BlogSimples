@@ -1,0 +1,45 @@
+﻿@using Web.Models.Identities
+@model Post
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6 card p-3">
+        <h2 class="text-center">Deletar</h2>
+        <hr />
+        <dl class="row">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Content)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Content)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.PublishDate)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.PublishDate)
+            </dd>
+        </dl>
+    
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="row">
+                <div class="col-8">
+                    <a asp-controller="Posts" asp-action="Index" asp-route-authorId="@Model?.AuthorId" class="text-decoration-none float-start mt-2">Voltar</a>
+                </div>
+                <div class="col-4">
+                    <input type="submit" value="Deletar" class="btn btn-danger btn-sm float-end" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
