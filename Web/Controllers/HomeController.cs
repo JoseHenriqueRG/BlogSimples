@@ -44,14 +44,15 @@ namespace Web.Controllers
             }
 
             var post = await _context.Posts
-                .Include(p => p.Author)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                                .Include(p => p.Author)
+                                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (post == null)
             {
                 return NotFound();
             }
 
-            return View(post);
+            return View(new PostViewModel() { Id = post.Id, Title = post.Title, Content = post.Content, PublishDate = post.PublishDate, Author = post.Author });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

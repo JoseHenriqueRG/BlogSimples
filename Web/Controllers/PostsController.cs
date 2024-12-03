@@ -66,7 +66,7 @@ namespace Web.Controllers
                 _context.Add(post);
                 await _context.SaveChangesAsync();
 
-                await _hubConnectionService.SendNotificationAsync($"Novo post criado: {post.Title}");
+                await _hubConnectionService.SendNotificationAsync($"<a href=\"/Home/Details/{post.Id}\">Novo post criado: {post.Title}</a>");
                 
                 return RedirectToAction("Index", "Posts", routeValues: post.AuthorId);
             }
